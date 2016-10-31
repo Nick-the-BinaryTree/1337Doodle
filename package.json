@@ -1,0 +1,15 @@
+{
+  "name": "1337doodle",
+  "version": "1.0.0",
+  "description": "l33t collaborative drawing tool",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies" : {
+    "express" : "4.x",
+    "socket.io" : "*"
+  },
+  "author": "",
+  "license": "ISC"
+}
