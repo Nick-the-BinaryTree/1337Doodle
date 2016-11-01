@@ -18,6 +18,9 @@ document.addEventListener("DOMContentLoaded", function(){
     canvas.width = width;
     canvas.height = height;
     context.strokeStyle = '#20C20E';
+    context.fillStyle = '#20C20E';
+    context.font = "16px sans";
+    
 
     canvas.onmousedown = function(e){
         mouse.click = true;
@@ -33,14 +36,17 @@ document.addEventListener("DOMContentLoaded", function(){
         mouse.move = true;
     }
 
-    socket.on('draw_line', function(data){
+   /* socket.on('draw_line', function(data){
         var line = data.line;
-        console.log(line);
         context.beginPath();
         context.lineWidth = 2;
         context.moveTo(line[0].x * width, line[0].y * height);
         context.lineTo(line[1].x * width, line[1].y * height);
         context.stroke();
+    });*/
+    
+    socket.on('draw_bit', function(bit){
+        context.fillText(bit.val, bit.x * width, bit.y * height);
     });
     
     socket.on('clear', function(){
@@ -48,8 +54,10 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     function mainLoop(){
-        if(mouse.click && mouse.move && mouse.pos_prev){
-            socket.emit('draw_line', { line : [ mouse.pos, mouse.pos_prev ] });
+        if(mouse.click && mouse.move/* && mouse.pos_prev*/){
+            //socket.emit('draw_line', { line : [ mouse.pos, mouse.pos_prev ] });
+            var val = (Math.random() > .5) ? "0" : "1";
+            socket.emit('draw_bit', { val : val, x : mouse.pos.x, y : mouse.pos.y });
             mouse.move = false;
         }
         
@@ -59,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         }
         
-        mouse.pos_prev = { x : mouse.pos.x, y : mouse.pos.y};
+        //mouse.pos_prev = { x : mouse.pos.x, y : mouse.pos.y};
         setTimeout(mainLoop, 25);
     }
 
